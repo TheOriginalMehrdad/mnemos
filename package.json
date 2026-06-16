@@ -1,0 +1,20 @@
+{
+  "name": "eruditio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ERUDITIO — local personal knowledge management & spaced-repetition learning platform",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "build": "npm run build -w @eruditio/shared && npm run build -w @eruditio/api",
+    "dev": "npm run start:dev -w @eruditio/api",
+    "test": "npm run test -w @eruditio/shared && npm run test -w @eruditio/api",
+    "db:push": "npm run db:push -w @eruditio/api",
+    "db:seed": "npm run prisma:seed -w @eruditio/api"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

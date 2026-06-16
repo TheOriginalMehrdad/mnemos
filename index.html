@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>MNEMOS — Personal Knowledge & Learning</title>
+  <meta name="description" content="MNEMOS — a living knowledge companion that strengthens memory, surfaces connections, and evolves with the learner." />
+
+  <link rel="stylesheet" href="styles/tokens.css" />
+  <link rel="stylesheet" href="styles/app.css" />
+  <link rel="stylesheet" href="styles/pages.css" />
+
+  <template id="__bundler_thumbnail" data-bg-color="#1A1612">
+    <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+      <rect width="1200" height="800" fill="#1A1612"/>
+      <text x="600" y="470" text-anchor="middle" font-family="Georgia, serif" font-size="320" font-weight="700" fill="#C8924E">M</text>
+      <text x="600" y="600" text-anchor="middle" font-family="sans-serif" font-size="48" letter-spacing="18" fill="#7A6E60">MNEMOS</text>
+    </svg>
+  </template>
+</head>
+<body>
+  <div id="root"></div>
+
+  <!-- React (pinned) -->
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+
+  <!-- Data + modules (plain JS; all use React.createElement, no JSX) -->
+  <script src="data/sampleData.js"></script>
+  <script src="app/api.js?v=2"></script>
+  <script src="app/icons.jsx"></script>
+  <script src="app/components.jsx"></script>
+  <script src="app/charts.jsx"></script>
+  <script src="app/shell.jsx"></script>
+  <script src="app/pages-home.jsx?v=2"></script>
+  <script src="app/pages-library.jsx"></script>
+  <script src="app/pages-review.jsx"></script>
+  <script src="app/pages-graph.jsx"></script>
+  <script src="app/pages-learning.jsx"></script>
+  <script src="app/pages-ai.jsx"></script>
+  <script src="app/pages-settings.jsx"></script>
+
+  <!-- Live API wiring: realtime client, then bootstrap -->
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js" crossorigin="anonymous"></script>
+  <script src="app/main.jsx"></script>
+</body>
+</html>

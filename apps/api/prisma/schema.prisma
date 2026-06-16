@@ -1,0 +1,515 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [pgvector(map: "vector", schema: "public"), pg_trgm(map: "pg_trgm", schema: "public")]
+}
+
+enum NoteStatus {
+  draft
+  review_ready
+  mastered
+}
+
+enum CardType {
+  basic
+  cloze
+  reverse
+  code
+  formula
+  translation
+  definition
+}
+
+enum QuestionType {
+  mc
+  tf
+  fill
+  short
+}
+
+enum EdgeType {
+  wikilink
+  semantic
+  tag
+  learning_path
+}
+
+enum PlanStatus {
+  active
+  paused
+  completed
+}
+
+enum GapType {
+  dangling
+  shallow
+  unlinked
+  stale
+}
+
+model User {
+  id             String   @id @default(cuid())
+  email          String   @unique
+  passwordHash   String   @map("password_hash")
+  name           String
+  initials       String
+  vaultPath      String?  @map("vault_path")
+  dailyGoalMin   Int      @default(30) @map("daily_goal_min")
+  dailyNewCards  Int      @default(15) @map("daily_new_cards")
+  interleaving   Boolean  @default(true)
+  theme          String   @default("system")
+  aiProvider     String   @default("openai") @map("ai_provider")
+  embeddingModel String   @default("text-embedding-3-small") @map("embedding_model")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  refreshTokens RefreshToken[]
+  notes         Note[]
+  cards         Card[]
+  reviewLogs    ReviewLog[]
+  quizzes       Quiz[]
+  quizAttempts  QuizAttempt[]
+  plans         Plan[]
+  languages     UserLanguage[]
+  gaps          Gap[]
+  insights      Insight[]
+  chatSessions  ChatSession[]
+  vault         Vault?
+  streak        Streak?
+  dailyStats    DailyStat[]
+  domains       Domain[]
+
+  @@map("users")
+}
+
+model RefreshToken {
+  id        String    @id @default(cuid())
+  userId    String    @map("user_id")
+  tokenHash String    @unique @map("token_hash")
+  expiresAt DateTime  @map("expires_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+  revokedAt DateTime? @map("revoked_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("refresh_tokens")
+}
+
+model Vault {
+  id          String    @id @default(cuid())
+  userId      String    @unique @map("user_id")
+  path        String
+  type        String    @default("obsidian")
+  lastIndexed DateTime? @map("last_indexed")
+  fileCount   Int       @default(0) @map("file_count")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("vaults")
+}
+
+model Domain {
+  id     String @id
+  userId String @map("user_id")
+  key    String
+  name   String
+  color  String @default("#888888")
+  hue    Int    @default(0)
+
+  user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  notes Note[]
+  cards Card[]
+
+  @@unique([userId, key])
+  @@index([userId])
+  @@map("domains")
+}
+
+model Note {
+  id          String     @id @default(cuid())
+  userId      String     @map("user_id")
+  slug        String
+  title       String
+  domainId    String     @map("domain_id")
+  topic       String     @default("")
+  status      NoteStatus @default(draft)
+  language    String     @default("en")
+  difficulty  Int        @default(3)
+  memory      Float      @default(50.0)
+  wordCount   Int        @default(0) @map("word_count")
+  readMinutes Int        @default(1) @map("read_minutes")
+  tags        String[]   @default([])
+  source      String     @default("")
+  excerpt     String     @default("")
+  content     String
+  filePath    String?    @map("file_path")
+  embedding   Unsupported("vector(1536)")?
+  lastReviewed DateTime? @map("last_reviewed")
+  deletedAt   DateTime?  @map("deleted_at")
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  domain    Domain     @relation(fields: [domainId], references: [id])
+  cards     Card[]
+  concepts  Concept[]
+  linksFrom NoteLink[] @relation("NoteFrom")
+  linksTo   NoteLink[] @relation("NoteTo")
+  planSteps PlanStep[]
+  gaps      Gap[]
+
+  @@unique([userId, slug])
+  @@index([userId])
+  @@index([userId, status])
+  @@index([userId, domainId])
+  @@index([userId, deletedAt])
+  @@map("notes")
+}
+
+model Concept {
+  id         String   @id @default(cuid())
+  noteId     String   @map("note_id")
+  term       String
+  definition String?
+  context    String?
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  note Note @relation(fields: [noteId], references: [id], onDelete: Cascade)
+
+  @@index([noteId])
+  @@map("concepts")
+}
+
+model NoteLink {
+  id     String   @id @default(cuid())
+  fromId String   @map("from_id")
+  toId   String   @map("to_id")
+  type   EdgeType @default(wikilink)
+
+  from Note @relation("NoteFrom", fields: [fromId], references: [id], onDelete: Cascade)
+  to   Note @relation("NoteTo", fields: [toId], references: [id], onDelete: Cascade)
+
+  @@unique([fromId, toId, type])
+  @@index([fromId])
+  @@index([toId])
+  @@map("note_links")
+}
+
+model Card {
+  id       String   @id @default(cuid())
+  userId   String   @map("user_id")
+  noteId   String   @map("note_id")
+  domainId String   @map("domain_id")
+  type     CardType @default(basic)
+  topic    String   @default("")
+  front    String
+  back     String
+  context  String?
+  language String   @default("en")
+
+  stability      Float    @default(1.0)
+  difficulty     Float    @default(5.0)
+  retrievability Float    @default(1.0)
+  due            DateTime @default(now())
+  interval       Int      @default(1)
+  ease           Float    @default(2.5)
+  reviews        Int      @default(0)
+  lapses         Int      @default(0)
+  memory         Float    @default(50.0)
+  state          String   @default("New")
+  suspended      Boolean  @default(false)
+
+  // Adaptive learning signals (beyond raw FSRS)
+  mistakeCount  Int       @default(0) @map("mistake_count")
+  correctStreak Int       @default(0) @map("correct_streak")
+  priorityBoost Float     @default(0.0) @map("priority_boost")
+  lastMistakeAt DateTime? @map("last_mistake_at")
+  urgencyScore  Float     @default(0.0) @map("urgency_score")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  note       Note        @relation(fields: [noteId], references: [id], onDelete: Cascade)
+  domain     Domain      @relation(fields: [domainId], references: [id])
+  reviewLogs ReviewLog[]
+
+  @@index([userId])
+  @@index([userId, due])
+  @@index([userId, noteId])
+  @@index([userId, suspended, urgencyScore])
+  @@map("cards")
+}
+
+model ReviewLog {
+  id     String @id @default(cuid())
+  userId String @map("user_id")
+  cardId String @map("card_id")
+  rating Int
+
+  durationMs       Int   @default(0) @map("duration_ms")
+  stabilityBefore  Float @map("stability_before")
+  difficultyBefore Float @map("difficulty_before")
+  retrievability   Float
+  intervalBefore   Int   @map("interval_before")
+  intervalAfter    Int   @map("interval_after")
+
+  reviewedAt DateTime @default(now()) @map("reviewed_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  card Card @relation(fields: [cardId], references: [id], onDelete: Cascade)
+
+  @@index([userId, reviewedAt])
+  @@index([cardId, reviewedAt])
+  @@map("review_logs")
+}
+
+model Quiz {
+  id         String  @id @default(cuid())
+  userId     String  @map("user_id")
+  title      String
+  domain     String
+  topic      String  @default("")
+  difficulty String  @default("Mixed")
+  lastScore  Int?    @map("last_score")
+  attempts   Int     @default(0)
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  questions    Question[]
+  quizAttempts QuizAttempt[]
+
+  @@index([userId])
+  @@map("quizzes")
+}
+
+model Question {
+  id          String       @id @default(cuid())
+  quizId      String       @map("quiz_id")
+  type        QuestionType
+  prompt      String
+  options     String[]     @default([])
+  answer      String
+  explanation String       @default("")
+  order       Int          @default(0)
+
+  quiz      Quiz           @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  responses QuizResponse[]
+
+  @@index([quizId])
+  @@map("questions")
+}
+
+model QuizAttempt {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  quizId    String   @map("quiz_id")
+  score     Int
+  timeSec   Int      @default(0) @map("time_sec")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  quiz      Quiz           @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  responses QuizResponse[]
+
+  @@index([userId])
+  @@map("quiz_attempts")
+}
+
+model QuizResponse {
+  id         String  @id @default(cuid())
+  attemptId  String  @map("attempt_id")
+  questionId String  @map("question_id")
+  answer     String
+  correct    Boolean
+
+  attempt  QuizAttempt @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+  question Question    @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@map("quiz_responses")
+}
+
+model Plan {
+  id         String     @id @default(cuid())
+  userId     String     @map("user_id")
+  title      String
+  goal       String
+  domain     String     @default("")
+  status     PlanStatus @default(active)
+  progress   Int        @default(0)
+  totalSteps Int        @default(0) @map("total_steps")
+  doneSteps  Int        @default(0) @map("done_steps")
+  daysPerDay Int        @default(1) @map("days_per_day")
+  createdAt  DateTime   @default(now()) @map("created_at")
+  updatedAt  DateTime   @updatedAt @map("updated_at")
+
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  milestones Milestone[]
+  steps      PlanStep[]
+
+  @@index([userId])
+  @@map("plans")
+}
+
+model Milestone {
+  id      String  @id @default(cuid())
+  planId  String  @map("plan_id")
+  name    String
+  done    Boolean @default(false)
+  current Boolean @default(false)
+  order   Int     @default(0)
+
+  plan Plan @relation(fields: [planId], references: [id], onDelete: Cascade)
+
+  @@map("milestones")
+}
+
+model PlanStep {
+  id     String @id @default(cuid())
+  planId String @map("plan_id")
+  noteId String @map("note_id")
+  order  Int    @default(0)
+
+  plan Plan @relation(fields: [planId], references: [id], onDelete: Cascade)
+  note Note @relation(fields: [noteId], references: [id], onDelete: Cascade)
+
+  @@unique([planId, noteId])
+  @@map("plan_steps")
+}
+
+model Gap {
+  id         String   @id @default(cuid())
+  userId     String   @map("user_id")
+  noteId     String?  @map("note_id")
+  type       GapType
+  term       String   @default("")
+  mentions   Int      @default(0)
+  days       Int      @default(0)
+  importance String   @default("medium")
+  resolved   Boolean  @default(false)
+  resolvedBy String?  @map("resolved_by")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  user User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  note Note? @relation(fields: [noteId], references: [id], onDelete: SetNull)
+
+  @@index([userId, type])
+  @@index([userId, resolved])
+  @@map("gaps")
+}
+
+model Insight {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  noteAId   String   @map("note_a_id")
+  noteBId   String   @map("note_b_id")
+  noteALabel String  @default("") @map("note_a_label")
+  noteBLabel String  @default("") @map("note_b_label")
+  noteADomain String @default("") @map("note_a_domain")
+  noteBDomain String @default("") @map("note_b_domain")
+  surprise  Float    @default(0.5)
+  text      String
+  seen      Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, seen])
+  @@map("insights")
+}
+
+model UserLanguage {
+  id            String @id @default(cuid())
+  userId        String @map("user_id")
+  code          String
+  name          String
+  flag          String
+  cefr          String @default("A1")
+  target        String @default("B1")
+  vocab         Int    @default(0)
+  vocabTarget   Int    @default(1000) @map("vocab_target")
+  grammar       Int    @default(0)
+  reading       Int    @default(0)
+  newWordsToday Int    @default(0) @map("new_words_today")
+  streak        Int    @default(0)
+
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  grammarAxes GrammarAxis[]
+
+  @@unique([userId, code])
+  @@index([userId])
+  @@map("user_languages")
+}
+
+model GrammarAxis {
+  id         String @id @default(cuid())
+  languageId String @map("language_id")
+  axis       String
+  score      Int
+
+  language UserLanguage @relation(fields: [languageId], references: [id], onDelete: Cascade)
+
+  @@map("grammar_axes")
+}
+
+model ChatSession {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user     User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages ChatMessage[]
+
+  @@index([userId])
+  @@map("chat_sessions")
+}
+
+model ChatMessage {
+  id        String   @id @default(cuid())
+  sessionId String   @map("session_id")
+  role      String
+  content   String
+  sources   String[] @default([])
+  createdAt DateTime @default(now()) @map("created_at")
+
+  session ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId])
+  @@map("chat_messages")
+}
+
+model Streak {
+  id            String    @id @default(cuid())
+  userId        String    @unique @map("user_id")
+  current       Int       @default(0)
+  longest       Int       @default(0)
+  lastStudyDate DateTime? @map("last_study_date")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("streaks")
+}
+
+model DailyStat {
+  id            String   @id @default(cuid())
+  userId        String   @map("user_id")
+  date          DateTime @db.Date
+  cardsReviewed Int      @default(0) @map("cards_reviewed")
+  studyMinutes  Int      @default(0) @map("study_minutes")
+  accuracy      Float    @default(0)
+  newCards      Int      @default(0) @map("new_cards")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+  @@index([userId, date])
+  @@map("daily_stats")
+}

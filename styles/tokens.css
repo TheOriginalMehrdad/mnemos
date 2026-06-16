@@ -1,0 +1,252 @@
+/* ============================================================
+   MNEMOS — Design Tokens
+   Editorial · warm-neutral · parchment aesthetic
+   ============================================================ */
+
+/* ---------- Fonts ---------- */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+  /* Type families */
+  --font-serif: 'Cormorant Garamond', 'Times New Roman', Georgia, serif;
+  --font-sans:  'DM Sans', 'Optima', 'Gill Sans', system-ui, sans-serif;
+  --font-mono:  'JetBrains Mono', 'Fira Code', Consolas, monospace;
+
+  /* Spacing (8px scale) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-8: 48px;
+  --space-10: 64px;
+  --space-12: 80px;
+
+  /* Radius */
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 20px;
+  --radius-full: 9999px;
+
+  /* Accent — Mnemos Gold */
+  --gold-pale: #F0C878;
+  --gold-medium: #C8924E;
+  --gold-deep: #9A6E3A;
+  --gold-burnt: #7A5228;
+
+  /* Memory state (light defaults; overridden per-mode) */
+  --mem-mastered: #4A7C59;
+  --mem-strong:   #3A7A78;
+  --mem-moderate: #8A6E28;
+  --mem-fragile:  #8A4A38;
+  --mem-critical: #7A2828;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* Layout */
+  --sidebar-w: 248px;
+  --sidebar-w-collapsed: 72px;
+  --topbar-h: 64px;
+  --maxw-reading: 72ch;
+}
+
+/* ---------- Light (Day) — primary ---------- */
+:root,
+[data-theme="light"] {
+  --bg-base:     #FAF8F5;
+  --bg-surface:  #F5F2EE;
+  --bg-elevated: #EFEBE6;
+  --bg-overlay:  #E8E3DC;
+  --bg-sunk:     #F0ECE6;
+
+  --text-primary:   #2C2418;
+  --text-secondary: #5C5244;
+  --text-tertiary:  #9C8E80;
+  --text-inverse:   #FAF8F5;
+
+  --border-faint:   #E0D9D0;
+  --border-default: #CBBCAB;
+  --border-strong:  #A8957F;
+
+  --accent:       #9A6E3A;
+  --accent-hover: #7A5228;
+  --accent-soft:  rgba(154, 110, 58, 0.10);
+  --accent-tint:  #F2E9DC;
+
+  --mem-mastered: #4A7C59;
+  --mem-strong:   #3A7A78;
+  --mem-moderate: #8A6E28;
+  --mem-fragile:  #8A4A38;
+  --mem-critical: #7A2828;
+
+  --shadow-card: 0 2px 12px rgba(44, 36, 24, 0.06);
+  --shadow-pop:  0 8px 32px rgba(44, 36, 24, 0.12);
+
+  --scrim: rgba(44, 36, 24, 0.32);
+  color-scheme: light;
+}
+
+/* ---------- Dark (Night) ---------- */
+[data-theme="dark"] {
+  --bg-base:     #1A1612;
+  --bg-surface:  #221E18;
+  --bg-elevated: #2C271F;
+  --bg-overlay:  #352F25;
+  --bg-sunk:     #15110D;
+
+  --text-primary:   #F0EAE0;
+  --text-secondary: #C4B8A8;
+  --text-tertiary:  #7A6E60;
+  --text-inverse:   #1A1612;
+
+  --border-faint:   #2E2820;
+  --border-default: #3E3628;
+  --border-strong:  #5C5040;
+
+  --accent:       #C8924E;
+  --accent-hover: #E0A862;
+  --accent-soft:  rgba(200, 146, 78, 0.12);
+  --accent-tint:  #2E2618;
+
+  --mem-mastered: #6DAF83;
+  --mem-strong:   #5EADA9;
+  --mem-moderate: #C49A3A;
+  --mem-fragile:  #C46A52;
+  --mem-critical: #B84040;
+
+  --shadow-card: 0 2px 14px rgba(0, 0, 0, 0.35);
+  --shadow-pop:  0 10px 40px rgba(0, 0, 0, 0.5);
+
+  --scrim: rgba(0, 0, 0, 0.55);
+  color-scheme: dark;
+}
+
+/* ============================================================
+   Base reset
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg-base);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  transition: background-color 0.4s var(--ease-out), color 0.4s var(--ease-out);
+}
+
+#root { height: 100%; }
+
+::selection { background: var(--accent-soft); color: var(--text-primary); }
+
+a { color: var(--accent); text-decoration: none; }
+
+button { font-family: inherit; cursor: pointer; }
+
+input, textarea, select { font-family: inherit; }
+
+/* Scrollbars */
+* { scrollbar-width: thin; scrollbar-color: var(--border-default) transparent; }
+*::-webkit-scrollbar { width: 10px; height: 10px; }
+*::-webkit-scrollbar-thumb {
+  background: var(--border-default);
+  border-radius: var(--radius-full);
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+*::-webkit-scrollbar-thumb:hover { background: var(--border-strong); background-clip: content-box; }
+
+/* ============================================================
+   Type utility classes
+   ============================================================ */
+.t-display-xl { font-family: var(--font-serif); font-size: 48px; line-height: 1.15; font-weight: 700; letter-spacing: -0.01em; }
+.t-display-lg { font-family: var(--font-serif); font-size: 36px; line-height: 1.2;  font-weight: 600; letter-spacing: -0.01em; }
+.t-display-md { font-family: var(--font-serif); font-size: 28px; line-height: 1.25; font-weight: 600; }
+.t-heading-lg { font-family: var(--font-serif); font-size: 22px; line-height: 1.3;  font-weight: 600; }
+.t-heading-md { font-family: var(--font-sans);  font-size: 18px; line-height: 1.35; font-weight: 600; }
+.t-heading-sm { font-family: var(--font-sans);  font-size: 15px; line-height: 1.4;  font-weight: 600; }
+.t-body-lg    { font-family: var(--font-sans);  font-size: 18px; line-height: 1.7;  font-weight: 400; }
+.t-body-md    { font-family: var(--font-sans);  font-size: 16px; line-height: 1.7;  font-weight: 400; }
+.t-body-sm    { font-family: var(--font-sans);  font-size: 14px; line-height: 1.6;  font-weight: 400; }
+.t-caption    { font-family: var(--font-sans);  font-size: 12px; line-height: 1.5;  font-weight: 400; }
+.t-label      { font-family: var(--font-sans);  font-size: 11px; line-height: 1.4;  font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; }
+.t-mono       { font-family: var(--font-mono);  font-size: 14px; line-height: 1.6;  font-weight: 400; }
+
+.serif { font-family: var(--font-serif); }
+.sans  { font-family: var(--font-sans); }
+.mono  { font-family: var(--font-mono); }
+
+.text-secondary { color: var(--text-secondary); }
+.text-tertiary  { color: var(--text-tertiary); }
+.text-accent    { color: var(--accent); }
+
+/* Eyebrow / section label */
+.eyebrow {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+/* ============================================================
+   Reusable primitives
+   ============================================================ */
+.surface {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-faint);
+  border-radius: var(--radius-md);
+}
+.elevated {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+}
+
+/* Focus ring */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Skeleton shimmer */
+@keyframes mnemos-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
+.skeleton {
+  background: var(--bg-elevated);
+  border-radius: var(--radius-sm);
+  animation: mnemos-pulse 1.4s var(--ease-in-out) infinite;
+}
+
+/* Fade / rise entrance */
+@keyframes mnemos-rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.rise { animation: mnemos-rise 0.4s var(--ease-out) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* Utility */
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { scrollbar-width: none; }

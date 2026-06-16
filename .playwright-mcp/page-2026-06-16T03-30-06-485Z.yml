@@ -1,0 +1,43 @@
+- generic [ref=e343]:
+  - generic [ref=e344]:
+    - button "Exit session" [ref=e345] [cursor=pointer]:
+      - img [ref=e346]
+    - generic [ref=e350]: 1 / 6
+  - generic [ref=e353] [cursor=pointer]:
+    - generic [ref=e354]:
+      - generic [ref=e355]:
+        - generic [ref=e356]: Mathematics
+        - generic [ref=e357]: basic
+      - generic [ref=e358]: What is Vector Spaces?
+      - generic [ref=e359]:
+        - generic [ref=e360]: Tap or press
+        - generic [ref=e361]: Space
+        - generic [ref=e362]: to reveal
+    - generic [ref=e363]:
+      - generic [ref=e364]:
+        - generic [ref=e365]: Answer
+        - button "Vector Spaces" [ref=e366]:
+          - img [ref=e367]
+          - text: Vector Spaces
+      - paragraph [ref=e370]: A vector space is a collection of vectors that can be added together and multiplied by scalars. The operations must satisfy axioms such as associativity, commutativity, and distributivity.
+  - generic [ref=e372]:
+    - button "1 Blackout No recall" [ref=e383] [cursor=pointer]:
+      - generic [ref=e384]: "1"
+      - generic [ref=e385]: Blackout
+      - generic [ref=e386]: No recall
+    - button "2 Fail Familiar" [ref=e387] [cursor=pointer]:
+      - generic [ref=e388]: "2"
+      - generic [ref=e389]: Fail
+      - generic [ref=e390]: Familiar
+    - button "3 Hard With effort" [ref=e391] [cursor=pointer]:
+      - generic [ref=e392]: "3"
+      - generic [ref=e393]: Hard
+      - generic [ref=e394]: With effort
+    - button "4 Good Some effort" [ref=e395] [cursor=pointer]:
+      - generic [ref=e396]: "4"
+      - generic [ref=e397]: Good
+      - generic [ref=e398]: Some effort
+    - button "5 Easy Instant" [ref=e399] [cursor=pointer]:
+      - generic [ref=e400]: "5"
+      - generic [ref=e401]: Easy
+      - generic [ref=e402]: Instant

@@ -1,0 +1,35 @@
+# ---- secrets / environment ----
+.env
+.env.*
+!.env.example
+
+# ---- dependencies ----
+node_modules/
+**/node_modules/
+
+# ---- build output ----
+dist/
+build/
+**/dist/
+*.tsbuildinfo
+
+# ---- runtime / uploads ----
+uploads/
+
+# ---- personal vault notes (keep the folder, ignore the notes) ----
+vault/**
+!vault/.gitkeep
+
+# ---- logs ----
+*.log
+npm-debug.log*
+
+# ---- OS / editor ----
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# ---- local tooling / session files ----
+.claude/
+SESSION_RESUME.md

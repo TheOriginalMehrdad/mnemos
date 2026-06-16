@@ -1,0 +1,11 @@
+- generic [ref=e4]:
+  - generic [ref=e5]: ERUDITIO
+  - paragraph [ref=e6]: Sign in to your knowledge base
+  - generic [ref=e7]:
+    - generic [ref=e8]: Username
+    - textbox "Username" [active] [ref=e9]: admin
+  - generic [ref=e10]:
+    - generic [ref=e11]: Password
+    - textbox "Password" [ref=e12]
+  - button "Sign in" [ref=e13] [cursor=pointer]
+  - paragraph [ref=e14]: Credentials are set via ADMIN_USERNAME / ADMIN_PASSWORD in .env

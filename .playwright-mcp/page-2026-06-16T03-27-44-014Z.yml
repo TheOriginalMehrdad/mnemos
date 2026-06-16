@@ -1,0 +1,137 @@
+- generic [ref=e7]:
+  - complementary [ref=e8]:
+    - button "M Mnemos Second Brain" [ref=e9] [cursor=pointer]:
+      - generic [ref=e10]: M
+      - generic [ref=e11]:
+        - text: Mnemos
+        - generic [ref=e12]: Second Brain
+    - navigation [ref=e13]:
+      - button "Home" [ref=e15] [cursor=pointer]:
+        - img [ref=e16]
+        - generic [ref=e18]: Home
+      - generic [ref=e19]:
+        - generic [ref=e20]: Knowledge
+        - button "Library" [ref=e21] [cursor=pointer]:
+          - img [ref=e22]
+          - generic [ref=e24]: Library
+        - button "Graph" [ref=e25] [cursor=pointer]:
+          - img [ref=e26]
+          - generic [ref=e28]: Graph
+      - generic [ref=e29]:
+        - generic [ref=e30]: Practice
+        - button "Review 2" [ref=e31] [cursor=pointer]:
+          - img [ref=e32]
+          - generic [ref=e34]: Review
+          - generic [ref=e35]: "2"
+        - button "Learning" [ref=e36] [cursor=pointer]:
+          - img [ref=e37]
+          - generic [ref=e39]: Learning
+      - generic [ref=e40]:
+        - generic [ref=e41]: Intelligence
+        - button "Semantic Search" [ref=e42] [cursor=pointer]:
+          - img [ref=e43]
+          - generic [ref=e45]: Semantic Search
+        - button "Ask MNEMOS" [ref=e46] [cursor=pointer]:
+          - img [ref=e47]
+          - generic [ref=e49]: Ask MNEMOS
+      - button "Settings" [ref=e51] [cursor=pointer]:
+        - img [ref=e52]
+        - generic [ref=e54]: Settings
+    - button "A admin 7-day streak · 🔥" [ref=e56] [cursor=pointer]:
+      - generic [ref=e57]: A
+      - generic [ref=e58]:
+        - generic [ref=e59]: admin
+        - generic [ref=e60]: 7-day streak · 🔥
+  - generic [ref=e61]:
+    - banner [ref=e62]:
+      - button "Toggle sidebar" [ref=e63] [cursor=pointer]:
+        - img [ref=e64]
+      - button "Search notes, cards, actions… ⌘K" [ref=e66]:
+        - img [ref=e67]
+        - generic [ref=e69]: Search notes, cards, actions…
+        - generic [ref=e70]: ⌘K
+      - generic [ref=e71]:
+        - button "Ask MNEMOS" [ref=e72] [cursor=pointer]:
+          - img [ref=e73]
+        - button "Dark mode" [ref=e75] [cursor=pointer]:
+          - img [ref=e76]
+        - button "Notifications" [ref=e79] [cursor=pointer]:
+          - img [ref=e80]
+        - generic [ref=e82]: A
+    - generic [ref=e255]:
+      - generic [ref=e256]:
+        - generic [ref=e257]:
+          - generic [ref=e258]: 3 notes · 2 domains
+          - heading "Library" [level=1] [ref=e259]
+        - generic [ref=e260]:
+          - button "Import" [ref=e261] [cursor=pointer]:
+            - img [ref=e262]
+            - generic [ref=e264]: Import
+          - button "New note" [ref=e265] [cursor=pointer]:
+            - img [ref=e266]
+            - generic [ref=e268]: New note
+      - generic [ref=e269]:
+        - generic [ref=e270]:
+          - img [ref=e271]
+          - textbox "Filter notes…" [ref=e273]
+        - generic [ref=e274]:
+          - button "Recently updated" [ref=e277] [cursor=pointer]:
+            - img [ref=e278]
+            - generic [ref=e280]: Recently updated
+            - img [ref=e281]
+          - generic [ref=e283]:
+            - button [ref=e284] [cursor=pointer]:
+              - img [ref=e285]
+            - button [ref=e287] [cursor=pointer]:
+              - img [ref=e288]
+      - generic [ref=e290]:
+        - button "All domains" [ref=e291] [cursor=pointer]
+        - button "General 1" [ref=e292] [cursor=pointer]:
+          - text: General
+          - generic [ref=e294]: "1"
+        - button "Mathematics 2" [ref=e295] [cursor=pointer]:
+          - text: Mathematics
+          - generic [ref=e297]: "2"
+      - generic [ref=e299]:
+        - button "All" [ref=e300] [cursor=pointer]
+        - button "Draft" [ref=e301] [cursor=pointer]
+        - button "Review-ready" [ref=e302] [cursor=pointer]
+        - button "Mastered" [ref=e303] [cursor=pointer]
+      - generic [ref=e304]:
+        - 'button "Mathematics Mastered · 100 Vector Spaces A vector space is a collection of vectors that can be added together and multiplied by scalars. The operations must satisfy axioms such as associativity, commutativity, and distributivity. # math # linear-algebra 1 min" [ref=e305] [cursor=pointer]':
+          - generic [ref=e306]:
+            - generic [ref=e307]: Mathematics
+            - generic "Mastered · 100" [ref=e308]
+          - heading "Vector Spaces" [level=3] [ref=e309]
+          - paragraph [ref=e310]: A vector space is a collection of vectors that can be added together and multiplied by scalars. The operations must satisfy axioms such as associativity, commutativity, and distributivity.
+          - generic [ref=e311]:
+            - generic [ref=e312]:
+              - generic [ref=e313]:
+                - generic [ref=e314]: "#"
+                - text: math
+              - generic [ref=e315]:
+                - generic [ref=e316]: "#"
+                - text: linear-algebra
+            - generic [ref=e317]: 1 min
+        - button "General Moderate · 50 Watcher Test This tests whether chokidar fires inside Docker. 1 min" [ref=e318] [cursor=pointer]:
+          - generic [ref=e319]:
+            - generic [ref=e320]: General
+            - generic "Moderate · 50" [ref=e321]
+          - heading "Watcher Test" [level=3] [ref=e322]
+          - paragraph [ref=e323]: This tests whether chokidar fires inside Docker.
+          - generic [ref=e325]: 1 min
+        - 'button "Mathematics Moderate · 50 Group Theory A group is a set equipped with an operation that combines any two elements to form a third element while satisfying closure, associativity, identity and invertibility. # math # algebra 1 min" [ref=e326] [cursor=pointer]':
+          - generic [ref=e327]:
+            - generic [ref=e328]: Mathematics
+            - generic "Moderate · 50" [ref=e329]
+          - heading "Group Theory" [level=3] [ref=e330]
+          - paragraph [ref=e331]: A group is a set equipped with an operation that combines any two elements to form a third element while satisfying closure, associativity, identity and invertibility.
+          - generic [ref=e332]:
+            - generic [ref=e333]:
+              - generic [ref=e334]:
+                - generic [ref=e335]: "#"
+                - text: math
+              - generic [ref=e336]:
+                - generic [ref=e337]: "#"
+                - text: algebra
+            - generic [ref=e338]: 1 min

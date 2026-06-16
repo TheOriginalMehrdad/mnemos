@@ -1,0 +1,31 @@
+- generic [ref=e343]:
+  - generic [ref=e344]:
+    - button "Exit session" [ref=e345] [cursor=pointer]:
+      - img [ref=e346]
+    - generic [ref=e350]: 2 / 6
+  - generic [ref=e353] [cursor=pointer]:
+    - generic [ref=e354]:
+      - generic [ref=e355]:
+        - generic [ref=e356]: Mathematics
+        - generic [ref=e357]: basic
+      - generic [ref=e358]: Summarize "Vector Spaces" in one sentence.
+      - generic [ref=e359]:
+        - generic [ref=e360]: Tap or press
+        - generic [ref=e361]: Space
+        - generic [ref=e362]: to reveal
+    - generic [ref=e363]:
+      - generic [ref=e364]:
+        - generic [ref=e365]: Answer
+        - button "Vector Spaces" [ref=e366]:
+          - img [ref=e367]
+          - text: Vector Spaces
+      - paragraph [ref=e404]: A vector space is a collection of vectors that can be added together and multiplied by scalars.
+  - generic [ref=e372]:
+    - button "Skip" [ref=e405] [cursor=pointer]:
+      - img [ref=e406]
+      - generic [ref=e408]: Skip
+    - button "Show Answer" [ref=e409] [cursor=pointer]:
+      - generic [ref=e410]: Show Answer
+    - button "Flag" [ref=e411] [cursor=pointer]:
+      - img [ref=e412]
+      - generic [ref=e414]: Flag
